@@ -19,7 +19,7 @@ with open("flowSpread1.txt") as f:
 
 biggest_idx = counts.index(max(counts))
 print("\nIP with most packets sent: " + ips[biggest_idx] + ": " + str(counts[biggest_idx]))
-print("Total packets: " + str(total_packets))
+print("total packets: " + str(total_packets))
 
 # group ips by their packet count value
 count_to_ips = defaultdict(list)
@@ -52,7 +52,7 @@ class PacketCountAxis(pg.AxisItem):
 
 app = pg.mkQApp("Flow Spread")
 
-win = pg.GraphicsLayoutWidget(title="IP Count per Packet-Count Value")
+win = pg.GraphicsLayoutWidget(title="")
 win.resize(1100, 650)
 
 plot = win.addPlot(
@@ -61,13 +61,19 @@ plot = win.addPlot(
         'bottom': PacketCountAxis(unique_counts, orientation='bottom')
     }
 )
-plot.setTitle(f"Number of IPs per Packet Count — {len(unique_counts)} unique values")
-plot.setLabel('left', 'Number of IPs (log scale)')
-plot.setLabel('bottom', 'Packets sent (least → greatest)')
+plot.setTitle(f"")
+plot.setLabel('left', 'number of IPs log scale')
+plot.setLabel('bottom', 'packets sent least to greatest')
 plot.showGrid(x=False, y=True, alpha=0.3)
 
-bars = pg.BarGraphItem(x=x, height=log_freq, width=0.9, brush=(70, 130, 180))
-plot.addItem(bars)
+scatter = pg.ScatterPlotItem(
+    x=x,
+    y=log_freq,
+    symbol='x',
+    size=10,
+    pen=pg.mkPen('w', width=2)
+)
+plot.addItem(scatter)
 plot.setXRange(-1, len(unique_counts))
 plot.setYRange(0, log_freq.max() * 1.05)
 
